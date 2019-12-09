@@ -19,20 +19,23 @@ namespace CSSSR_Test
         {
             using (driver = new ChromeDriver("."))
             {
-
+                // Переходим на тестовую страницу 
                 driver.Navigate().GoToUrl(url);
-
+                 // Получаем список элементов а
                 var links = driver.FindElements(By.CssSelector("a"));
 
                 using (var client = new HttpClient())
                 {
                     foreach (var link in links)
                     {
+                        // Получаем ссылку 
                         var href = link.GetAttribute("href");
                         try
                         {
+                           // по ссылке делаем запрос 
                             var response = client.GetAsync(href).Result;
 
+                            // 
                             if (!response.IsSuccessStatusCode)
                             {
                                 Console.WriteLine(href + " gave a response code of: " + response.StatusCode);
@@ -43,7 +46,8 @@ namespace CSSSR_Test
                             }
                         }
                         catch
-                        {
+                        { 
+                            //если ссылка некорректная, проверяем, является ли ссылка почтой
                             try
                             {
                                 new MailAddress(href);
